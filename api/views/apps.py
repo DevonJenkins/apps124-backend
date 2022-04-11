@@ -33,7 +33,7 @@ def show(id):
   app_data = app.serialize()
   return jsonify(app=app_data), 200
 
-#PUT api/apps/<id> 
+#Update an app: PUT api/apps/<id> 
 @apps.route('/<id>', methods=["PUT"])
 @login_required
 def update(id):
@@ -49,3 +49,18 @@ def update(id):
 
   db.session.commit()
   return jsonify(app.serialize()), 200 
+
+#Delete an app: DELETE api/apps/<id> 
+@apps.route('/<id>', methods=["DELETE"])
+@login_required
+def delete(id):
+  profile = read_token(request)
+  app = App.query.filter_by(id=id).first()
+
+  if app.profile_id != profile["id"]:
+    return "Forbidden", 403
+
+  db.session.delete(app)
+  db.session.commit()
+  return jsonify(message="Delete Successful"), 200 
+
