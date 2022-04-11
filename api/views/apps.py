@@ -1,3 +1,4 @@
+from crypt import methods
 from flask import Blueprint, jsonify, request
 from api.middleware import login_required, read_token
 
@@ -24,3 +25,10 @@ def create():
 def index():
   apps = App.query.all()
   return jsonify([app.serialize() for app in apps]), 200   
+
+#Show an app: GET api/apps/<id>
+@apps.route('/<id>', methods=["GET"])
+def show(id):
+  app = App.query.filter_by(id=id).first()
+  app_data = app.serialize()
+  return jsonify(app=app_data), 200
