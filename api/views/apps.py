@@ -19,3 +19,8 @@ def create():
 
   return jsonify(app.serialize()), 201 
 
+#Index apps: GET api/apps 
+@apps.route('/', methods=["GET"])
+def index():
+  apps = App.query.all()
+  return jsonify([app.serialize() for app in apps]), 200   
