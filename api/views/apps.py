@@ -32,3 +32,20 @@ def show(id):
   app = App.query.filter_by(id=id).first()
   app_data = app.serialize()
   return jsonify(app=app_data), 200
+
+#PUT api/apps/<id> 
+@apps.route('/<id>', methods=["PUT"])
+@login_required
+def update(id):
+  data = request.get_json()
+  profile = read_token(request)
+  app = App.query.filter_by(id=id).first()
+
+  if app.profile_id != profile["id"]:
+    return "Forbidden", 403
+  
+  for key in data:
+    setattr(app, key, data[key])
+
+  db.session.commit()
+  return jsonify(app.serialize()), 200 
