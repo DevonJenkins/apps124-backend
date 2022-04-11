@@ -1,3 +1,4 @@
+from crypt import methods
 from flask import Blueprint, jsonify, request
 from api.middleware import login_required, read_token
 
@@ -24,3 +25,42 @@ def create():
 def index():
   apps = App.query.all()
   return jsonify([app.serialize() for app in apps]), 200   
+
+#Show an app: GET api/apps/<id>
+@apps.route('/<id>', methods=["GET"])
+def show(id):
+  app = App.query.filter_by(id=id).first()
+  app_data = app.serialize()
+  return jsonify(app=app_data), 200
+
+#Update an app: PUT api/apps/<id> 
+@apps.route('/<id>', methods=["PUT"])
+@login_required
+def update(id):
+  data = request.get_json()
+  profile = read_token(request)
+  app = App.query.filter_by(id=id).first()
+
+  if app.profile_id != profile["id"]:
+    return "Forbidden", 403
+  
+  for key in data:
+    setattr(app, key, data[key])
+
+  db.session.commit()
+  return jsonify(app.serialize()), 200 
+
+#Delete an app: DELETE api/apps/<id> 
+@apps.route('/<id>', methods=["DELETE"])
+@login_required
+def delete(id):
+  profile = read_token(request)
+  app = App.query.filter_by(id=id).first()
+
+  if app.profile_id != profile["id"]:
+    return "Forbidden", 403
+
+  db.session.delete(app)
+  db.session.commit()
+  return jsonify(message="Delete Successful"), 200 
+
