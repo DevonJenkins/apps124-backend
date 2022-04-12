@@ -8,6 +8,7 @@ from config import Config
 from api.models.user import User
 from api.models.profile import Profile
 from api.models.app import App 
+from api.models.badge import Badge
 
 # ============ Import Views ============
 from api.views.auth import auth
