@@ -1,3 +1,4 @@
+from crypt import methods
 from flask import Blueprint, jsonify, request
 from api.middleware import login_required, read_token
 
@@ -30,3 +31,20 @@ def index():
 def show(id):
   badge = Badge.query.filter_by(id=id).first()
   return jsonify(badge.serialize()), 200
+
+#Update a badges: PUT api/badges/<id> 
+@badges.route('/<id>', methods=["PUT"])
+@login_required
+def update(id):
+  data = request.get_json()
+  profile = read_token(request)
+  badge = Badge.query.filter_by(id=id).first()
+
+  if badge.profile_id != profile["id"]:
+    return "Forbidden", 403
+  
+  for key in data:
+    setattr(badge, key, data[key])
+
+  db.session.commit()
+  return jsonify(badge.serialize()), 200 
