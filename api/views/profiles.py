@@ -13,3 +13,11 @@ profiles = Blueprint('profiles', 'profiles')
 def index():
   profiles = Profile.query.all()
   return jsonify([profile.serialize() for profile in profiles]), 200
+
+# Get api/profiles/<id> 
+
+@profiles.route('/<id>', methods=["GET"])
+def show(id):
+  profile = Profile.query.filter_by(id=id).first()
+  return jsonify(profile.serialize()), 200
+
