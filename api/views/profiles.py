@@ -23,20 +23,33 @@ def show(id):
   return jsonify(profile.serialize()), 200
 
 #Update profiles: PUT api/profiles/<id> 
-# @profiles.route('/<id>', methods=["PUT"])
-# @login_required
-# def update(id):
-#   data = request.get_json()
-#   profile = read_token(request)
-#   profile = Profile.query.filter_by(id=id).first()
+@profiles.route('/<id>', methods=["PUT"])
+@login_required
+def update(id):
+  data = request.get_json()
+  profile = read_token(request)
+  user_profile = Profile.query.filter_by(id=id).first()
 
-#   if profile.id != profile["id"]:
-#     return "Forbidden", 403
+  if user_profile.id != profile["id"]:
+    return "Forbidden", 403
 
-#   for key in data:
-#     setattr(profile, key, data[key])
+  for key in data:
+    setattr(user_profile, key, data[key])
 
-#   db.session.commit()
-#   return jsonify(profile.serialize()), 200
+  db.session.commit()
+  return jsonify(user_profile.serialize()), 200
 
+#Delete a badge: DELETE api/badges/<id>
+@profiles.route('/<id>', methods=["DELETE"])
+@login_required
+def delete(id):
+  profile = read_token(request)
+  user_profile = Profile.query.filter_by(id=id).first()
+
+  if user_profile.id != profile["id"]:
+    return "Forbidden", 403
+
+  db.session.delete(user_profile)
+  db.session.commit()
+  return jsonify(message="Delete Successful"), 200 
 
