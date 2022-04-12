@@ -14,6 +14,7 @@ from api.models.badge import Badge
 from api.views.auth import auth
 from api.views.profiles import profiles
 from api.views.apps import apps
+from api.views.badges import badges
 
 cors = CORS()
 migrate = Migrate() 
@@ -31,6 +32,7 @@ def create_app(config):
   app.register_blueprint(auth, url_prefix='/api/auth')
   app.register_blueprint(profiles, url_prefix='/api/profiles')
   app.register_blueprint(apps, url_prefix='/api/apps/')
+  app.register_blueprint(badges, url_prefix='/api/badges/')
 
   return app
 
