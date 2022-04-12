@@ -25,4 +25,8 @@ def index():
   badges = Badge.query.all()
   return jsonify([badge.serialize() for badge in badges]), 201 
 
-
+#Show a badge
+@badges.route('/<id>', methods=["GET"])
+def show(id):
+  badge = Badge.query.filter_by(id=id).first()
+  return jsonify(badge.serialize()), 200
