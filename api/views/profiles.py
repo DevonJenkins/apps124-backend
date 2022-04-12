@@ -39,18 +39,18 @@ def update(id):
   db.session.commit()
   return jsonify(profile.serialize()), 200
 
-#Delete profiles: DELETE api/profiles/<id>
-@profiles.route('/<id>', methods=["DELETE"])
-@login_required
-def delete(id):
-  profile = read_token(request)
-  profile = Profile.query.filter_by(id=id).first()
+# #Delete profiles: DELETE api/profiles/<id>
+# @profiles.route('/<id>', methods=["DELETE"])
+# @login_required
+# def delete(id):
+#   profile = read_token(request)
+#   profile = Profile.query.filter_by(id=id).first()
 
-# ==--why doesn't this work here==--
-  # if profile.profile_id != profile["id"]:
-    # return 'Forbidden', 403
+# # ==--why doesn't this work here==--
+#   # if profile.profile_id != profile["id"]:
+#     # return 'Forbidden', 403
 
-  db.session.delete(profile)
-  db.session.commit()
-  return jsonify(message="Success"), 200
+#   db.session.delete(profile)
+#   db.session.commit()
+#   return jsonify(message="Success"), 200
 
