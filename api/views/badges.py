@@ -1,4 +1,5 @@
 from crypt import methods
+from wsgiref.util import request_uri
 from flask import Blueprint, jsonify, request
 from api.middleware import login_required, read_token
 
@@ -48,3 +49,18 @@ def update(id):
 
   db.session.commit()
   return jsonify(badge.serialize()), 200 
+
+#Delete a badge: DELETE api/badges/<id>
+@badges.route('/<id>', methods=["DELETE"])
+@login_required
+def delete(id):
+  profile = read_token(request)
+  badge = Badge.query.filter_by(id=id).first()
+
+  if badge.profile_id != profile["id"]:
+    return "Forbidden", 403
+
+  db.session.delete(badge)
+  db.session.commit()
+  return jsonify(message="Delete Successful"), 200 
+
