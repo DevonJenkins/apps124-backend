@@ -23,20 +23,20 @@ def show(id):
   return jsonify(profile.serialize()), 200
 
 #Update profiles: PUT api/profiles/<id> 
-@profiles.route('/<id>', methods=["PUT"])
-@login_required
-def update(id):
-  data = request.get_json()
-  profile = read_token(request)
-  profile = Profile.query.filter_by(id=id).first()
+# @profiles.route('/<id>', methods=["PUT"])
+# @login_required
+# def update(id):
+#   data = request.get_json()
+#   profile = read_token(request)
+#   profile = Profile.query.filter_by(id=id).first()
 
-  if profile.profile_id != profile["id"]:
-    return "Forbidden", 403
+#   if profile.id != profile["id"]:
+#     return "Forbidden", 403
 
-  for key in data:
-    setattr(profile, key, data[key])
+#   for key in data:
+#     setattr(profile, key, data[key])
 
-  db.session.commit()
-  return jsonify(profile.serialize()), 200
+#   db.session.commit()
+#   return jsonify(profile.serialize()), 200
 
 
