@@ -19,4 +19,10 @@ def create():
   db.session.commit()
   return jsonify(badge.serialize()), 201
 
+#Index badges: GET/api/badges/
+@badges.route('/', methods=['GET'])
+def index():
+  badges = Badge.query.all()
+  return jsonify([badge.serialize() for badge in badges]), 201 
+
 
