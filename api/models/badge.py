@@ -1,5 +1,4 @@
 from datetime import datetime
-from turtle import color
 from api.models.db import db 
 
 class Badge(db.Model):
