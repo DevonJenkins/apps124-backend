@@ -8,6 +8,7 @@ class App(db.Model):
   appType = db.Column(db.String(100))
   description = db.Column(db.String(250))
   photo = db.Column(db.String(100))
+  link = db.Column(db.String(100))
   created_at = db.Column(db.DateTime, default=datetime.utcnow)
   profile_id = db.Column(db.Integer, db.ForeignKey('profiles.id'))
 
